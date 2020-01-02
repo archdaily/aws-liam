@@ -1,0 +1,14 @@
+default: &default
+  aws:
+    region: ""
+    access_key_id: ""
+    secret_access_key: ""
+    sns_endpoint: ""
+    sqs_endpoint: ""
+    sqs_queue: ""
+  topics:
+    # liam_ArticleUpdate: "arn:aws:sns:us-east-1:000000000000:liam_ArticleUpdate"
+
+development: *default
+test: *default
+production: *default
