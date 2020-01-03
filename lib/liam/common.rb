@@ -8,6 +8,10 @@ module Liam
       @sns_client ||= Aws::SNS::Client.new(client_options)
     end
 
+    def poller
+      @poller ||= Aws::SQS::QueuePoller.new(sqs_queue, client: sqs_client)
+    end
+
     def client_options
       {
         region: credentials['region'],

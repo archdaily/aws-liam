@@ -4,9 +4,7 @@ require 'liam/common'
 
 module Liam
   class Consumer
-    SQS_QUEUE = "#"
-
-    include Common
+    include Liam::Common
 
     def self.message(*args)
       new(*args).send(:execute)
@@ -16,30 +14,28 @@ module Liam
     def execute
       poller.poll(skip_delete: true, max_number_of_messages: 10) do |messages|
         messages.each do |message|
-          @message = JSON.parse(message.body)
           process_message
         end
       end
-    raise Aws::SQS::Errors::ServiceError => error
-      puts 'Fatal Error...'
+    raise Aws::SQS::Errors::ServiceError => e
+      puts "Fatal Error... #{e}"
     end
 
-    def poller
-      @poller ||= Aws::SQS::QueuePoller.new(SQS_QUEUE, client: sqs_client)
+    def sqs_queue
+      @sqs_queue ||= liam_yaml['aws']['sqs_queue']
     end
 
     def process_message
-      create_topic_class
-      # call_class
-      # delete_message
+      @message = JSON.parse(message.body)['Message']
+      Object.const_get(topic_class).send(:new, message).send(:process)
+    rescue LoadError, RuntimeError, NameError
+      'Error processing message from SQS'
     end
 
-    def create_topic_class
-      event_name = message.dig('MessageAttributes', 'event_name', 'Value')
+    def topic_class
+      event_name = message['MessageAttributes']['event_name']['Value']
       event_name.split('_').map(&:capitalize).join('::')
     end
-
-    def call_class; end
 
     def delete_message
       client.delete_message(queue_url: SQS_QUEUE, receipt_handle: message.receipt_handle)
