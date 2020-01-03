@@ -24,7 +24,7 @@ module Liam
     def execute
       return unless topic
       return unless message
-      # return unless validate_message?
+      return unless validate_message?
       send_message
     end
 
@@ -52,11 +52,9 @@ module Liam
     end
 
     def validate_message?
-      !!validate_message
-    end
-
-    def validate_message
-      JSON.parse(message)
+      !!JSON.parse(message)
+    rescue
+      false
     end
 
     private
