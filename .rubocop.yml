@@ -1,0 +1,7 @@
+Metrcis/LineLength:
+  Max: 100
+Metrics/BlockLength:
+  Exclude:
+    - spec/**/*.rb
+Style/Documentation:
+  Enabled: false
