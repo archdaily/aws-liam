@@ -3,9 +3,11 @@ default: &default
     region: ""
     access_key_id: ""
     secret_access_key: ""
-    sns_endpoint: ""
-    sqs_endpoint: ""
-    sqs_queue: ""
+    sns:
+      endpoint: ""
+    sqs:
+      endpoint: ""
+      queue: ""
   topics:
     # liam_ArticleUpdate: "arn:aws:sns:us-east-1:000000000000:liam_ArticleUpdate"
 

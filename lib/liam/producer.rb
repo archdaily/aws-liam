@@ -1,6 +1,7 @@
+# frozen_string_literal: true
+
 require 'json'
 require 'aws-sdk-sns'
-require 'liam/common'
 require 'yaml'
 
 module Liam
@@ -17,44 +18,28 @@ module Liam
       new(*args).send(:execute)
     end
 
-    def topic_arn
-      @topic_arn ||= liam_yaml['topics'][topic]
-    end
-
     def execute
-      return unless topic
-      return unless message
-      return unless validate_message?
+      raise UNSUPPORTED_TOPIC_ERROR unless supported_topic?
+      raise UNSUPPORTED_MESSAGE_ERROR unless message.is_a?(Hash)
+
       send_message
     end
 
     def send_message
       sns_client.publish(
-        topic_arn: topic_arn,
-        message: message,
+        topic_arn: env_credentials['topics'][topic],
+        message: message.to_json,
         subject: subject,
         message_attributes: message_attributes
       )
     end
 
     def message_attributes
-      {
-        event_name: {
-          string_value: topic,
-          data_type: 'String'
-        }
-      }
+      { event_name: { string_value: topic, data_type: 'String' } }
     end
 
     def subject
-      return 'liam message' unless options['subject']
-      options['subject']
-    end
-
-    def validate_message?
-      !!JSON.parse(message)
-    rescue
-      false
+      options['subject'] || 'liam message'
     end
 
     private
@@ -62,5 +47,11 @@ module Liam
     attr_accessor :topic, :message, :options
 
     private_class_method :new
+
+    def supported_topic?
+      return false unless topic.is_a?(String) || topic.is_a?(Symbol)
+
+      !topic.empty?
+    end
   end
 end

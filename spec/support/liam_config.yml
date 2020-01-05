@@ -1,0 +1,16 @@
+default: &default
+  aws:
+    region: us-east-1
+    access_key_id: test
+    secret_access_key: test
+    sns:
+      endpoint: http://localhost:4575
+    sqs:
+      endpoint: http://localhost:4576
+      queue: http://localhost:4576/queue/liam_test-app
+  topics:
+    liam_TestProducer: arn:aws:sns:us-east-1:000000000000:liam_TestProducer
+
+development: *default
+test: *default
+production: *default
