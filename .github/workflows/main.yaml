@@ -32,7 +32,7 @@ jobs:
         bundle install --jobs 4 --retry 3
         python -m pip install --upgrade pip
         curl "https://d1vvhvl2y92vvt.cloudfront.net/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-        unzip awscliv2.zip
+        unzip -q awscliv2.zip
         sudo ./aws/install
         which aws2
         which aws
