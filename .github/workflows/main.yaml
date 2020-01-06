@@ -11,15 +11,8 @@ jobs:
     steps:
     - uses: actions/checkout@v1
 
-    - name: Set up Python 3.7
-      uses: actions/setup-python@v1
-      with:
-        version: 3.7
-
-    - name: Install pip
-      run: |
-        python -m pip install --upgrade pip
-        pip install localstack
+    - name: Set up localstack
+      run: docker-compose -f docker-compose.localstack.yml up -d
 
     - name: Set up Ruby 2.6
       uses: actions/setup-ruby@v1
@@ -35,5 +28,4 @@ jobs:
 
     - name: Run tests
       run: |
-        localstack start
         RAILS_ENV=test bundle exec rspec -fd
