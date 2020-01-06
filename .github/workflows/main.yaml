@@ -36,6 +36,7 @@ jobs:
         sudo ./aws/install
         which aws2
         which aws
+        cp .aws/config ~/.aws/config
         aws --endpoint-url=http://localhost:4575 sns create-topic --name liam_TestProducer
 
     - name: Run tests
