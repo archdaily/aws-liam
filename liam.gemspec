@@ -21,10 +21,10 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'aws-sdk-sns', '~> 1.21'
   spec.add_dependency 'aws-sdk-sqs', '~> 1.23', '>= 1.23.1'
 
-  spec.add_development_dependency "bundler"
-  spec.add_development_dependency "pry"
-  spec.add_development_dependency "rake", "~> 10.0"
-  spec.add_development_dependency "rspec-rails"
-  spec.add_development_dependency "rubocop", "~> 0.62"
-  spec.add_development_dependency "webmock"
+  spec.add_development_dependency 'bundler', '~> 1.16'
+  spec.add_development_dependency 'pry', '~> 0.12.2'
+  spec.add_development_dependency 'rake', '~> 10.0'
+  spec.add_development_dependency 'rspec-rails', '~> 3.9.0'
+  spec.add_development_dependency 'rubocop', '~> 0.62'
+  spec.add_development_dependency 'webmock', '~> 3.7.6'
 end

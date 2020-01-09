@@ -7,8 +7,17 @@ require 'active_support/json'
 
 RSpec.describe Liam::Producer do
   let(:config_path) { File.expand_path('spec/support/liam_config.yml') }
-  let(:message) { { books: [{ id: 1, isbn10: '9561111853' }, { id: 2, isbn10: '9562623246' }] } }
+  let(:message) do
+    {
+      books: [
+        { id: 1, isbn10: '9561111853' },
+        { id: 2, isbn10: '9562623246' }
+      ]
+    }
+  end
   let(:topic) { 'liam_TestProducer' }
+  let(:arn) { 'arn:aws:sns:us-east-1:000000000000:liam_TestProducer' }
+  let(:sns_url) { 'http://localhost:4575/' }
 
   before do
     allow(described_class).to receive(:new).and_return(producer)
@@ -59,14 +68,12 @@ RSpec.describe Liam::Producer do
     let(:publish_action) { params['Action'].value }
     let(:message_query) { { 'Message': published_message }.to_query }
 
-    it 'successfully publishes a message with credentials from config. file' do
+    it 'publishes a message with credentials from config. file' do
       expect(publish_message).to be_successful
       expect(published_message).to eq(message.to_json)
       expect(publish_action).to eq('Publish')
-      expect(publish_topic_arn).to eq('arn:aws:sns:us-east-1:000000000000:liam_TestProducer')
-      expect(WebMock).to(
-        have_requested(:post, 'http://localhost:4575/').with(body: /#{message_query}/)
-      )
+      expect(publish_topic_arn).to eq(arn)
+      expect(WebMock).to have_requested(:post, sns_url).with(body: /#{message_query}/)
     end
   end
 end

@@ -19,6 +19,10 @@ module Liam
       @poller ||= Aws::SQS::QueuePoller.new(sqs_queue, client: sqs_client)
     end
 
+    def sqs_queue
+      @sqs_queue ||= env_credentials.dig('aws', 'sqs', 'queue')
+    end
+
     def config
       "#{File.expand_path(__dir__)}/config/liam.yml"
     end
