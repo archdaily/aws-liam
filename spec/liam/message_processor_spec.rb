@@ -61,7 +61,6 @@ RSpec.describe Liam::MessageProcessor do
       end
 
       it do
-        binding.pry
         expect { described_class.process(message) }.to(
           raise_error(
             Liam::UninitializedMessageProcessorError,
@@ -108,7 +107,7 @@ RSpec.describe Liam::MessageProcessor do
     it 'invokes the process method in the class expected to process the message' do
       mock = double(Liam::TestProducer)
       expect(Liam::TestProducer).to receive(:new).and_return(mock)
-      expect(mock).to receive(:process).and_return(:processed)
+      expect(mock).to receive(:process)
       described_class.process(message)
     end
   end
