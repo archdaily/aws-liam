@@ -6,6 +6,8 @@ module Liam
       @message = message
     end
 
-    def process; end
+    def process
+      :processed
+    end
   end
 end

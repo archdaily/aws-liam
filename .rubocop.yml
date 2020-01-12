@@ -5,3 +5,6 @@ Metrics/BlockLength:
     - spec/**/*.rb
 Style/Documentation:
   Enabled: false
+StyleAccessModifierDeclarations:
+  Exclude:
+    - lib/liam/message_processor.rb

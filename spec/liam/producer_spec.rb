@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
-require 'pry'
-require 'active_support/core_ext/object'
-require 'active_support/json'
 
 RSpec.describe Liam::Producer do
   let(:config_path) { File.expand_path('spec/support/liam_config.yml') }
@@ -20,22 +17,25 @@ RSpec.describe Liam::Producer do
   let(:sns_url) { 'http://localhost:4575/' }
 
   before do
-    allow(described_class).to receive(:new).and_return(producer)
-    allow(producer).to receive(:config).and_return(config_path)
+    stub_const('Liam::Common::CONFIG_FILE', config_path)
   end
 
   describe 'topic argument validation' do
     describe 'when invoked with an unsupported topic object' do
       context 'when invoked with topic nil' do
-        let(:producer) { described_class.send(:new, message: message, topic: nil) }
-
-        it { expect { producer.execute }.to raise_error(Liam::Common::UNSUPPORTED_TOPIC_ERROR) }
+        it do
+          expect(described_class.message(message: message, topic: nil)).to(
+            eq(described_class::UNSUPPORTED_TOPIC_ERROR)
+          )
+        end
       end
 
       context 'when invoked with empty string topic' do
-        let(:producer) { described_class.send(:new, message: message, topic: '') }
-
-        it { expect { producer.execute }.to raise_error(Liam::Common::UNSUPPORTED_TOPIC_ERROR) }
+        it do
+          expect(described_class.message(message: message, topic: '')).to(
+            eq(described_class::UNSUPPORTED_TOPIC_ERROR)
+          )
+        end
       end
     end
   end
@@ -43,30 +43,49 @@ RSpec.describe Liam::Producer do
   describe 'message argument validation' do
     describe 'when invoked with a message other than a Symbol' do
       context 'when invoked with message nil' do
-        let(:producer) { described_class.send(:new, message: nil, topic: topic) }
-
-        it { expect { producer.execute }.to raise_error(Liam::Common::UNSUPPORTED_MESSAGE_ERROR) }
+        it do
+          expect(described_class.message(message: nil, topic: topic)).to(
+            eq(described_class::UNSUPPORTED_MESSAGE_ERROR)
+          )
+        end
       end
 
       context 'when invoked with empty string message' do
-        let(:producer) { described_class.send(:new, message: '', topic: topic) }
-
-        it { expect { producer.execute }.to raise_error(Liam::Common::UNSUPPORTED_MESSAGE_ERROR) }
+        it do
+          expect(described_class.message(message: '', topic: topic)).to(
+            eq(described_class::UNSUPPORTED_MESSAGE_ERROR)
+          )
+        end
       end
+    end
+  end
+
+  describe 'when unable to get the topics key from the configuration file' do
+    subject { described_class.send(:new, message: message, topic: topic) }
+
+    before do
+      allow(subject).to receive(:topics).and_return(nil)
+    end
+
+    it do
+      expect { subject.send(:execute) }.to raise_error(
+        Liam::NoTopicsInConfigFileError,
+        'No topics found in the Liam configuration file.'
+      )
     end
   end
 
   describe 'successful implementation' do
     let(:producer) { described_class.send(:new, message: message, topic: topic) }
     let(:json_message) { message.to_json }
-    let(:publish_message) { producer.execute }
+    let(:publish_message) { producer.send(:execute) }
     let(:http_request) { publish_message.instance_variable_get(:@http_request) }
     let(:publish_param_list) { http_request.body.param_list }
     let(:params) { publish_param_list.instance_variable_get(:@params) }
     let(:published_message) { params['Message'].value }
     let(:publish_topic_arn) { params['TopicArn'].value }
     let(:publish_action) { params['Action'].value }
-    let(:message_query) { { 'Message': published_message }.to_query }
+    let(:message_query) { URI.encode_www_form('Message': published_message) }
 
     it 'publishes a message with credentials from config. file' do
       expect(publish_message).to be_successful

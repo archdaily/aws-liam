@@ -4,28 +4,7 @@ require 'yaml'
 
 module Liam
   module Common
-    UNSUPPORTED_MESSAGE_ERROR = 'Unsupported message argument'
-    UNSUPPORTED_TOPIC_ERROR = 'Unsupported topic argument'
-
-    def sns_client
-      @sns_client ||= Aws::SNS::Client.new(client_options)
-    end
-
-    def sqs_client
-      @sqs_client ||= Aws::SQS::Client.new(client_options)
-    end
-
-    def poller
-      @poller ||= Aws::SQS::QueuePoller.new(sqs_queue, client: sqs_client)
-    end
-
-    def sqs_queue
-      @sqs_queue ||= env_credentials.dig('aws', 'sqs', 'queue')
-    end
-
-    def config
-      "#{File.expand_path(__dir__)}/config/liam.yml"
-    end
+    CONFIG_FILE = 'config/liam.yml'
 
     def client_options
       {
@@ -40,8 +19,10 @@ module Liam
       credentials[ENV['RAILS_ENV']]
     end
 
+    # TODO: This might fail depending on how you're using the gem.
+    #       Add dummy Rails app to test integration
     def credentials
-      YAML.load_file(config)
+      YAML.load_file(CONFIG_FILE)
     end
   end
 end
