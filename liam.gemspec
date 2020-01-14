@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = %q{Write a short summary, because RubyGems requires one.}
   spec.description   = %q{Write a longer description or delete this line.}
-  spec.homepage      = "http://github.com/archdaily/liam"
+  spec.homepage      = "https://github.com/alexismansilla/liam"
   spec.license       = "MIT"
   spec.files         = Dir['lib/**/*.rb']
   spec.require_paths = ["lib"]
