@@ -12,7 +12,7 @@ module Liam
       @options = options
     end
 
-    def self.message(*args)
+    def self.execute(*args)
       new(*args).send(:execute)
     end
 

@@ -1,13 +1,13 @@
 default: &default
   aws:
-    region: ""
-    access_key_id: ""
-    secret_access_key: ""
+    region:
+    access_key_id:
+    secret_access_key:
     sns:
-      endpoint: ""
+      endpoint:
     sqs:
-      endpoint: ""
-      queue: ""
+      endpoint:
+      queue:
   topics:
 
 development: *default
