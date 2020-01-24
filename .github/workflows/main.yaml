@@ -1,0 +1,44 @@
+name: Main
+
+on: [pull_request]
+
+jobs:
+  vm-job:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 4
+
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Set up Python 3.7
+      uses: actions/setup-python@v1
+      with:
+        python_version: 3.7
+
+    - name: Set up localstack
+      run: docker-compose -f docker-compose.localstack.yml up -d
+
+    - name: Set up Ruby 2.6
+      uses: actions/setup-ruby@v1
+      with:
+        ruby_version: 2.6.3
+
+    - name: Build
+      env:
+        RAILS_ENV: test
+      run: |
+        gem install bundler
+        bundle install --jobs 4 --retry 3
+        python -m pip install --upgrade pip
+        curl "https://d1vvhvl2y92vvt.cloudfront.net/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+        unzip -q awscliv2.zip
+        sudo ./aws/install
+        which aws2
+        which aws
+        cp -avr .aws/ ~/
+        aws --endpoint-url=http://localhost:4575 sns create-topic --name liam_TestProducer
+
+    - name: Run tests
+      run: |
+        RAILS_ENV=test bundle exec rspec -fd

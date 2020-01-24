@@ -1,66 +1,63 @@
-require 'json'
+# frozen_string_literal: true
+
 require 'aws-sdk-sns'
-require 'liam/common'
-require 'yaml'
+require 'forwardable'
 
 module Liam
   class Producer
-    include Liam::Common
+    DEFAULT_SUBJECT = 'liam message'
+    UNSUPPORTED_MESSAGE_ERROR = 'Unsupported message argument'
+    UNSUPPORTED_TOPIC_ERROR = 'Unsupported topic argument'
+    private_constant :DEFAULT_SUBJECT
 
-    def initialize(topic:, message:, options: {})
-      @topic   = topic
+    include Common
+
+    extend Forwardable
+
+    def initialize(message:, options: {}, topic:)
       @message = message
       @options = options
+      @topic = topic
     end
 
     def self.message(*args)
       new(*args).send(:execute)
     end
 
-    def topic_arn
-      @topic_arn ||= liam_yaml['topics'][topic]
-    end
+    private
+
+    private_class_method :new
+
+    attr_reader :topic, :message, :options
 
     def execute
-      return unless topic
-      return unless message
-      return unless validate_message?
-      send_message
-    end
+      return UNSUPPORTED_TOPIC_ERROR unless supported_topic?
+      return UNSUPPORTED_MESSAGE_ERROR unless message.is_a?(Hash)
 
-    def send_message
-      sns_client.publish(
+      Aws::SNS::Client.new(client_options).publish(
         topic_arn: topic_arn,
-        message: message,
-        subject: subject,
+        message: message.to_json,
+        subject: options['subject'] || options[:subject] || DEFAULT_SUBJECT,
         message_attributes: message_attributes
       )
     end
 
+    def supported_topic?
+      (topic.is_a?(String) || topic.is_a?(Symbol)) && !topic.empty?
+    end
+
     def message_attributes
-      {
-        event_name: {
-          string_value: topic,
-          data_type: 'String'
-        }
-      }
+      { event_name: { string_value: topic, data_type: 'String' } }
     end
 
-    def subject
-      return 'liam message' unless options['subject']
-      options['subject']
+    def topic_arn
+      raise NoTopicsInConfigFileError unless topics
+
+      topics[topic]
     end
 
-    def validate_message?
-      !!JSON.parse(message)
-    rescue
-      false
+    def topics
+      @topics ||= env_credentials['topics']
     end
-
-    private
-
-    attr_accessor :topic, :message, :options
-
-    private_class_method :new
   end
 end

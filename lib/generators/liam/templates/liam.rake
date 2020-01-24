@@ -4,7 +4,7 @@ namespace :liam do
   namespace :consumer do
     desc 'Launch Liam consumer'
     task start: :environment do
-      Liam::Consumer.execute
+      Liam::Consumer.message
     end
   end
 end
