@@ -16,7 +16,7 @@ module Liam
     end
 
     def env_credentials
-      credentials[ENV['RAILS_ENV']]
+      @env_credentials ||= credentials[ENV['RAILS_ENV']]
     end
 
     # TODO: This might fail depending on how you're using the gem.
