@@ -8,7 +8,7 @@ we called it Liam in honor to (Liam Neeson) for so many reasons!
 
 Liam sends an important message to Marko from Tropoja
 
-> *I DONT KNOW WHO YOU ARE, I DON’T KNOW WHAT YOU WANT, BUT I WILL FIND YOUM AND I WILL KILL YOU*
+> *I DONT KNOW WHO YOU ARE, I DON’T KNOW WHAT YOU WANT, BUT I WILL FIND YOU AND I WILL KILL YOU*...
 
 We have a medium post [Here](https://medium.com/archdaily-on-technology/microservices-events-aws-our-path-to-improve-communication-between-our-ruby-on-rails-apps-501b65e35fa3) where we improve communication between our Rails apps and avoided create new endpoints in our apps.
 BUT What's happening when the App A needs data of App B and App B is down for a microsecond?
@@ -37,7 +37,7 @@ Add this line to your application's Gemfile:
   $ bundle install
 ```
 
-If you want the liam file in yout rails app then execute:
+If you want the liam file in your rails app then execute:
 
 ```ruby
   $ bundle exec rails install:liam
