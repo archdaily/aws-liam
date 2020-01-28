@@ -57,6 +57,12 @@ We're going to create 2 Liam file
   Liam::Producer.message(topic: topic_name, message: message)
 ```
 
+## Testing
+  TODO
+
+## Localstack Running
+  TODO
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/alexismansilla/liam.
