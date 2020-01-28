@@ -1,6 +1,4 @@
-# Liam
-
-**Welcome to Liam Gem!**
+# Welcome to Liam Gem!
 
 Liam is an integration between your rails app & SNS, SQS AWS Services.
 
