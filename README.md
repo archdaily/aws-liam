@@ -2,13 +2,13 @@
 
 Liam is an integration between your rails app & SNS, SQS AWS Services. It allows sending a message to the AWS queue (SQS) and processes the topic name on other rails app. (microservices)
 
-we name the gem Liam in honor to (Liam Neeson) for so many reasons!
+we called it Liam in honor to (Liam Neeson) for so many reasons!
 
-![Image](http://beta.ems.ladbiblegroup.com/s3/content/3b78f4f35c505d72d306a86eed07d052.png)
+![Image](https://pmctvline2.files.wordpress.com/2015/09/taken-prequel.jpg)
 
 Liam sends an important message to Marko from Tropoja
 
-> *I dont know who you are, i don’t know what you want, but i will find youm and i will kill you*
+> *I DONT KNOW WHO YOU ARE, I DON’T KNOW WHAT YOU WANT, BUT I WILL FIND YOUM AND I WILL KILL YOU*
 
 We have a medium post [Here](https://medium.com/archdaily-on-technology/microservices-events-aws-our-path-to-improve-communication-between-our-ruby-on-rails-apps-501b65e35fa3) where we improve communication between our Rails apps and avoided create new endpoints in our apps.
 BUT What's happening when the App A needs data of App B and App B is down for a microsecond?
