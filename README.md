@@ -65,7 +65,13 @@ We're going to create 2 Liam files
 ```
 
 ## Testing
-  TODO
+Can you run the test easily executing
+
+```ruby
+  bundle exec rspec
+```
+
+if you want to run all test successfully, we need the LocalStack daemon when sending a message
 
 ## Localstack Running
   TODO
