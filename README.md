@@ -1,44 +1,61 @@
 # Liam
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/liam`. To experiment with that code, run `bin/console` for an interactive prompt.
+Welcome to Liam Gem!, Liam is an integration between your rails app & SNS, SQS AWS Services.
 
-TODO: Delete this and the text above, and describe your gem
+Liam allows sending a message to the AWS queue (SQS) and processes the topic name on other rails app.
+
+What happens here?
+
+We have a medium post [Here] (https://medium.com/archdaily-on-technology/microservices-events-aws-our-path-to-improve-communication-between-our-ruby-on-rails-apps-501b65e35fa3)
+Where we improve communication between our Rails apps and avoided create new endpoints in our apps.
+BUT What's happening when the App A needs data of App B and App B is down for a microsecond?
+
+Welcome, Liam!
+
+With Liam, We can send a message easily  to SQS Service through SNS Service
+
+The first thing:
+
+What's SNS Service?
+
+Amazon Simple Notification Service (SNS) [Documentation] (https://docs.aws.amazon.com/sns/latest/dg/welcome.html)
+
+What's SQS Service?
+
+Amazon Simple Queue Service (Amazon SQS) [Documentation] (https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html)
+
+[Image]
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'liam'
+  gem 'liam', git: 'https://github.com/alexismansilla/liam.git'
+
+  $ bundle install
 ```
 
-And then execute:
+If you want the liam file in yout rails app then execute:
 
-    $ bundle
+```ruby
+  $ bundle exec rails install:liam
+```
 
-Or install it yourself as:
-
-    $ gem install liam
+We're going to create 2 Liam file
+  - /config/liam.yaml
+  - /lib/task/liam.rake
 
 ## Usage
 
-TODO: Write usage instructions here
+```ruby
+  message    = { id: self.id, title: self.title, created_at: self.created_at }.to_json
+  topic_name = 'liam_CreateArticle'
 
-## Development
-
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
-
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+  Liam::Producer.message(topic: topic_name, message: messag)
+```
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/liam. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+Bug reports and pull requests are welcome on GitHub at https://github.com/alexismansilla/liam.
 
-## License
-
-The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
-
-## Code of Conduct
-
-Everyone interacting in the Liam project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/liam/blob/master/CODE_OF_CONDUCT.md).
-# liam
