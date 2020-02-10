@@ -19,8 +19,6 @@ module Liam
       @env_credentials ||= credentials[ENV['RAILS_ENV']]
     end
 
-    # TODO: This might fail depending on how you're using the gem.
-    #       Add dummy Rails app to test integration
     def credentials
       YAML.load_file(CONFIG_FILE)
     end
