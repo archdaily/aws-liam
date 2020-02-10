@@ -6,14 +6,13 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'liam/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = 'liam'
+  spec.name          = 'aws-liam'
   spec.version       = Liam::VERSION
   spec.authors       = ["alexismansilla"]
   spec.email         = ["alexis.mansilla04@gmail.com"]
-
   spec.summary       = %q{Write a short summary, because RubyGems requires one.}
   spec.description   = %q{Write a longer description or delete this line.}
-  spec.homepage      = "http://github.com/archdaily/liam"
+  spec.homepage      = "http://github.com/archdaily/aws-liam"
   spec.license       = "MIT"
   spec.files         = Dir['lib/**/*.rb']
   spec.require_paths = ['lib']

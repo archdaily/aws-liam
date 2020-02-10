@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    liam (0.1.0)
+    aws-liam (1.0.0)
       aws-sdk-sns (~> 1.21)
       aws-sdk-sqs (~> 1.23, >= 1.23.1)
 
@@ -12,8 +12,8 @@ GEM
       public_suffix (>= 2.0.2, < 5.0)
     ast (2.4.0)
     aws-eventstream (1.0.3)
-    aws-partitions (1.263.0)
-    aws-sdk-core (3.88.0)
+    aws-partitions (1.269.0)
+    aws-sdk-core (3.89.1)
       aws-eventstream (~> 1.0, >= 1.0.2)
       aws-partitions (~> 1, >= 1.239.0)
       aws-sigv4 (~> 1.1)
@@ -75,8 +75,8 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  aws-liam!
   bundler (~> 1.16)
-  liam!
   pry (~> 0.12.2)
   rake (~> 10.0)
   rspec (~> 3.9.0)
