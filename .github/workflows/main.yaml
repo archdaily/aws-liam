@@ -31,6 +31,7 @@ jobs:
         unzip -q awscliv2.zip
         sudo ./aws/install
         cp -avr .aws/ ~/
+        while ! curl -s http://localhost:4575 > /dev/null; do echo waiting for localstack; sleep 3; done;
         aws --endpoint-url=http://localhost:4575 sns create-topic --name liam_TestProducer
 
     - name: Build

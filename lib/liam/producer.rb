@@ -57,7 +57,7 @@ module Liam
     end
 
     def topics
-      @topics ||= env_credentials['topics']
+      @topics ||= env_credentials['events']
     end
   end
 end

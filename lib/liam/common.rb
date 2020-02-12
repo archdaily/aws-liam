@@ -4,7 +4,7 @@ require 'yaml'
 
 module Liam
   module Common
-    CONFIG_FILE = 'config/liam.yml'
+    CONFIG_FILE = File.expand_path('config/liam.yml')
 
     def client_options
       {

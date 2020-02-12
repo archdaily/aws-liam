@@ -8,7 +8,7 @@ default: &default
     sqs:
       endpoint:
       queue:
-  topics:
+  events:
 
 development: *default
 test: *default
