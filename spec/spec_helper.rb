@@ -4,7 +4,6 @@ ENV['RAILS_ENV'] = 'test'
 
 require 'liam'
 require 'webmock/rspec'
-require 'pry'
 
 RSpec.configure do |config|
   config.mock_with :rspec do |mocks|

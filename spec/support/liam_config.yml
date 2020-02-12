@@ -8,7 +8,7 @@ default: &default
     sqs:
       endpoint: http://localhost:4576
       queue: http://localhost:4576/queue/liam_gem
-  topics:
+  events:
     liam_TestProducer: arn:aws:sns:us-east-1:000000000000:liam_TestProducer
 
 development: *default
