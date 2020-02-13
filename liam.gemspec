@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ['alexismansilla', 'sebastian-palma']
   spec.email         = ['alexis.mansilla04@gmail.com', 'sebastianpalma@protonmail.com']
   spec.summary       = 'AWS SQS+SNS middleware integration between Ruby microservices'
-  spec.description   = 'AWS SQS+SNS middleware integration between Ruby microservices'
+  spec.description   = 'Improved communication between our (Ruby on Rails) apps with AWS SNS - SQS'
   spec.homepage      = 'http://github.com/archdaily/aws-liam'
   spec.license       = 'MIT'
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(spec)/}) }
