@@ -8,7 +8,7 @@ require 'liam/version'
 Gem::Specification.new do |spec|
   spec.name          = 'aws-liam'
   spec.version       = Liam::VERSION
-  spec.authors       = ['alexismansilla']
+  spec.authors       = ['alexismansilla', 'sebastian-palma']
   spec.email         = ['alexis.mansilla04@gmail.com', 'sebastianpalma@protonmail.com']
   spec.summary       = 'AWS SQS+SNS middleware integration between Ruby microservices'
   spec.description   = 'AWS SQS+SNS middleware integration between Ruby microservices'
