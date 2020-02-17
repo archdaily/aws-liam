@@ -12,7 +12,7 @@ module Liam
         endpoint: env_credentials['aws']['sns']['endpoint'],
         region: env_credentials['aws']['region'],
         secret_access_key: env_credentials['aws']['secret_access_key']
-      }
+      }.compact
     end
 
     def env_credentials
