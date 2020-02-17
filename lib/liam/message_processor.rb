@@ -13,6 +13,7 @@ module Liam
 
     def self.process(message)
       raise UnexpectedMessageError, message unless message.is_a?(Aws::SQS::Types::Message)
+      puts "[aws-liam] Processing #{message}"
 
       new(message).send(:process)
     end
