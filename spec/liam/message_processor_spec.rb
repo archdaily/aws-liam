@@ -5,40 +5,28 @@ require 'liam/test_producer'
 
 RSpec.describe Liam::MessageProcessor do
   let(:config_path) { File.expand_path('spec/support/liam_config.yml') }
-  let(:event) { 'liam_TestProducer' }
-  let(:value_message_attribute) { { Value: event } }
+  let(:string_value) { 'liam_TestProducer' }
   let(:message) do
     Aws::SQS::Types::Message.new(
-      message_id: '77c972cf-fbaa-4d98-b0d9-f66196da3986',
-      receipt_handle: '77c972cf-fbaa-4d98-b0d9-f66196da3986#f7307ca5-0580-4e52-b8e9-c8e0f7ec4325',
-      md5_of_body: 'bd6e137230719036d2bd8008c1e11a3d',
-      body: {
-        MessageId: '7beeffda-2519-4ea7-8fe3-b52c629053a2',
-        Type: 'Notification',
-        Timestamp: '2020-01-07T11:32:13.189882Z',
-        Message: {
-          books: [
-            { id: 1, isbn10: '9561111853' },
-            { id: 2, isbn10: '9562623246' }
-          ]
-        },
-        TopicArn: 'arn:aws:sns:us-east-1:000000000000:liam_TestProducer',
-        MessageAttributes: {
-          event_name: {
-            data_type: 'String'
-          }.merge(value_message_attribute)
-        }
-      }.to_json,
+      message_id: '9e5172f1-b3dc-4b26-b7b9-54cbe80fe10',
+      receipt_handle: 'XXXXXXX',
+      md5_of_body: 'e3c6eb96e4a77aa181d654396eed8692',
+      body: { books: [{ id: 1, isbn10: '9561111853' }, { id: 2, isbn10: '9562623246' } ]}.to_json,
       attributes: {
-        SentTimestamp: '1578396733208',
-        ApproximateReceiveCount: '1',
-        ApproximateFirstReceiveTimestamp: '1578396733208',
-        SenderId: '127.0.0.1',
-        MessageDeduplicationId: '',
-        MessageGroupId: ''
+        'SenderId'=>'AIDAIT2UOQQY3AUEKVGXU',
+        'ApproximateFirstReceiveTimestamp'=>'1582032411670',
+        'ApproximateReceiveCount'=>'1',
+        'SentTimestamp'=>'1582032411669'
       },
-      md5_of_message_attributes: nil,
-      message_attributes: {}
+      message_attributes: {
+        'event_name' => Aws::SQS::Types::MessageAttributeValue.new(
+          string_value: string_value,
+          binary_value: nil,
+          string_list_values: [],
+          binary_list_values: [],
+          data_type: 'String'
+        )
+      }
     )
   end
 
@@ -74,7 +62,7 @@ RSpec.describe Liam::MessageProcessor do
     end
 
     context 'when the message received does not have a expected Value key' do
-      let(:value_message_attribute) { { string_value: event } }
+      let(:string_value) { nil }
 
       it 'raises a custom MessageWithoutValueAttributeError' do
         expect { described_class.process(message) }.to(

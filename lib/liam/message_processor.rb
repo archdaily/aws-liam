@@ -30,7 +30,7 @@ module Liam
     end
 
     def processor
-      Object.const_get(message_topic_name).new(parsed_message['Message'])
+      Object.const_get(message_topic_name).new(parsed_message)
     rescue NameError => e
       raise UninitializedMessageProcessorError, e
     end
@@ -40,7 +40,7 @@ module Liam
     end
 
     def message_attribute_value
-      parsed_message.dig('MessageAttributes', 'event_name', 'Value').tap do |value|
+      message.message_attributes['event_name'].string_value.tap do |value|
         raise MessageWithoutValueAttributeError unless value
       end
     end
