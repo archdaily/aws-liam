@@ -40,9 +40,18 @@ module Liam
     end
 
     def message_attribute_value
-      message.message_attributes['event_name'].string_value.tap do |value|
-        raise MessageWithoutValueAttributeError unless value
-      end
+      raise MessageWithoutValueAttributeError if value.nil? || value.empty?
+
+      value
+    end
+
+    def value
+      @value ||= begin
+                   return if parsed_message.nil? || parsed_message.empty?
+
+                   message.message_attributes['event_name']&.string_value ||
+                     parsed_message.dig('MessageAttributes', 'event_name', 'Value')
+                 end
     end
   end
 end
