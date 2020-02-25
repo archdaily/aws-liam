@@ -44,7 +44,7 @@ Then execute this little rake tast that will generate some configuration files n
  1. /config/liam.yaml
  2. /lib/task/liam.rake
 
-Go to the first one an setup your credentials and topics endpoints at AWS). The second rake task should need to be called in Service B (and whenever you want to keep listening from new messages)
+Go to the first one an setup your credentials and topics endpoints at AWS. The second rake task should need to be called in Service B (and whenever you want to keep listening from new messages)
 
 ## Usage
 
@@ -79,6 +79,12 @@ module Liam
 end
 ```
 All of these files should live at `app/services/liam`.
+
+Now you have to run the included task inside the Consumer App (make sure this task runs for ever):
+
+```
+$ bundle exec rake liam:consumer:start production
+```
 
 And that's it!
 
