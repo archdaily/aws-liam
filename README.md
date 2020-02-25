@@ -42,7 +42,7 @@ Then execute this little rake tast that will generate some configuration files n
 2 files will be created:
 
  1. config/liam.yaml
- 2. /lib/task/liam.rake
+ 2. lib/task/liam.rake
 
 Go to the first one an setup your credentials and topics endpoints at AWS. The second rake task should need to be called in Service B (and whenever you want to keep listening from new messages)
 
