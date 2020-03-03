@@ -38,8 +38,8 @@ jobs:
       env:
         RAILS_ENV: test
       run: |
-        gem install bundler -v 1.16
-        bundle _1.16_ install --jobs 4 --retry 3
+        gem install bundler -v 2.1.4
+        bundle _2.1.4_ install --jobs 4 --retry 3
 
     - name: Run tests
       run: |
