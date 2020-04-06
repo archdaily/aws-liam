@@ -3,6 +3,7 @@
 require 'aws-sdk-sqs'
 require 'liam/common'
 require 'liam/message_processor'
+require 'pp'
 
 module Liam
   class Consumer
@@ -22,9 +23,9 @@ module Liam
 
     def execute
       poller.poll(poller_options) do |messages|
-        puts "[aws-liam] Received #{messages} messages"
-        puts messages.join("\n")
+        puts "INFO -- [aws-liam] : ** Received messages: #{messages.size} ** --"
         messages.each do |message|
+          pp message
           MessageProcessor.process(message)
         end
       end

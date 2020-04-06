@@ -4,6 +4,7 @@ on: [pull_request]
 
 jobs:
   vm-job:
+    if: contains(toJson(github.event.commits), '[ci skip]') == false
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 4

@@ -34,7 +34,7 @@ module Liam
       return UNSUPPORTED_TOPIC_ERROR unless supported_topic?
       return UNSUPPORTED_MESSAGE_ERROR unless message.is_a?(Hash)
 
-      puts "[aws-liam] Publishing message: #{message}"
+      puts "INFO -- [aws-liam]: ** Publishing message: #{message} ** --"
       Aws::SNS::Client.new(client_options).publish(
         topic_arn: topic_arn,
         message: message.to_json,
@@ -58,7 +58,9 @@ module Liam
     end
 
     def topics
-      @topics ||= env_credentials['events']
+      return @topics if defined?(@topics)
+
+      @topics = env_credentials['events']
     end
   end
 end

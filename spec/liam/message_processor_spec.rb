@@ -6,27 +6,38 @@ require 'liam/test_producer'
 RSpec.describe Liam::MessageProcessor do
   let(:config_path) { File.expand_path('spec/support/liam_config.yml') }
   let(:string_value) { 'liam_TestProducer' }
+  let(:sent_message) do
+    { books: [{ id: 1, isbn10: '9561111853' }, { id: 2, isbn10: '9562623246' }] }
+  end
   let(:message) do
     Aws::SQS::Types::Message.new(
       message_id: '9e5172f1-b3dc-4b26-b7b9-54cbe80fe10',
       receipt_handle: 'XXXXXXX',
       md5_of_body: 'e3c6eb96e4a77aa181d654396eed8692',
-      body: { books: [{ id: 1, isbn10: '9561111853' }, { id: 2, isbn10: '9562623246' } ]}.to_json,
+      body: {
+        'MessageId' => 'ae5f3c82-a0e1-47a1-b2e2-2aad30f1f955',
+        'Type' => 'Notification',
+        'Timestamp' => '2020-04-07T08:09:39.425213Z',
+        'Message' => sent_message.to_json,
+        'TopicArn' => 'arn:aws:sns:us-east-1:000000000000:liam_TestProducer',
+        'Subject' => 'liam message',
+        'MessageAttributes' => {
+          'event_name' => {
+            'Type' => 'String',
+            'Value' => string_value
+          }
+        }
+      }.to_json,
       attributes: {
-        'SenderId'=>'AIDAIT2UOQQY3AUEKVGXU',
-        'ApproximateFirstReceiveTimestamp'=>'1582032411670',
-        'ApproximateReceiveCount'=>'1',
-        'SentTimestamp'=>'1582032411669'
+        'SentTimestamp' => '1586249319798',
+        'ApproximateReceiveCount' => '1',
+        'ApproximateFirstReceiveTimestamp' => '1586249319798',
+        'SenderId' => '127.0.0.1',
+        'MessageDeduplicationId' => '',
+        'MessageGroupId' => ''
       },
-      message_attributes: {
-        'event_name' => Aws::SQS::Types::MessageAttributeValue.new(
-          string_value: string_value,
-          binary_value: nil,
-          string_list_values: [],
-          binary_list_values: [],
-          data_type: 'String'
-        )
-      }
+      md5_of_message_attributes: nil,
+      message_attributes: {}
     )
   end
 
