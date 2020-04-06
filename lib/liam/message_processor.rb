@@ -13,7 +13,7 @@ module Liam
 
     def self.process(message)
       raise UnexpectedMessageError, message unless message.is_a?(Aws::SQS::Types::Message)
-      puts "[aws-liam] Processing #{message}"
+      puts "[aws-liam] Processing..."
 
       new(message).send(:process)
     end
@@ -30,7 +30,7 @@ module Liam
     end
 
     def processor
-      Object.const_get(message_topic_name).new(parsed_message)
+      Object.const_get(message_topic_name).new(JSON.parse(parsed_message['Message']))
     rescue NameError => e
       raise UninitializedMessageProcessorError, e
     end

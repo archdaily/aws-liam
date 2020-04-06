@@ -22,7 +22,7 @@ module Liam
 
     def execute
       poller.poll(poller_options) do |messages|
-        puts "[aws-liam] Received #{messages} messages"
+        puts "INFO -- [aws-liam] : ** Received message: #{messages}  ** --"
         puts messages.join("\n")
         messages.each do |message|
           MessageProcessor.process(message)
