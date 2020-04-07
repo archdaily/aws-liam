@@ -13,7 +13,7 @@ module Liam
 
     def self.process(message)
       raise UnexpectedMessageError, message unless message.is_a?(Aws::SQS::Types::Message)
-      puts "[aws-liam] Processing #{message}"
+      puts "[aws-liam] Processing..."
 
       new(message).send(:process)
     end
@@ -23,10 +23,15 @@ module Liam
     attr_reader :message
 
     private(*def_delegator(:message, :body))
+    private(*def_delegator(:message, :message_attributes))
     private(*def_delegator(:processor, :process))
 
-    def parsed_message
+    def parsed_body
       JSON.parse(body)
+    end
+
+    def parsed_message
+      JSON.parse(parsed_body['Message'])
     end
 
     def processor
@@ -46,12 +51,14 @@ module Liam
     end
 
     def value
-      @value ||= begin
-                   return if parsed_message.nil? || parsed_message.empty?
+      return @value if defined?(@value)
 
-                   message.message_attributes['event_name']&.string_value ||
-                     parsed_message.dig('MessageAttributes', 'event_name', 'Value')
-                 end
+      @value = begin
+                 return if parsed_body.nil? || parsed_body.empty?
+
+                 message_attributes['event_name']&.string_value ||
+                   parsed_body.dig('MessageAttributes', 'event_name', 'Value')
+               end
     end
   end
 end
