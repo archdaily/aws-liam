@@ -72,22 +72,6 @@ RSpec.describe Liam::MessageProcessor do
       end
     end
 
-    context 'when the message received does not have a expected Value key' do
-      let(:string_value) { nil }
-
-      it 'raises a custom MessageWithoutValueAttributeError' do
-        expect { described_class.process(message) }.to(
-          raise_error(
-            Liam::MessageWithoutValueAttributeError,
-            <<~MSG.gsub(/\n/, '')
-              Expected to get a message attribute value to initialize the class to process 
-              this message, but the value received is invalid.
-            MSG
-          )
-        )
-      end
-    end
-
     context 'when initialized without an Aws::SQS::Types::Message object' do
       let(:message) { nil }
 

@@ -52,10 +52,10 @@ Go to the first one an setup your credentials and topics endpoints at AWS. The s
 Every time something happens in Service A that needs to be shared to other applications (for example, an article was published) you need to put this simple three lines (basically create the article JSON, define where do you want to send the message and send the message):
 
 ```ruby
-  message    = { id: id, title: title, created_at: created_at }
-  topic_name = 'liam_ArticleCreated'
+message    = { id: id, title: title, created_at: created_at }
+topic_name = 'liam_ArticleCreated'
 
-  Liam::Producer.message(topic: topic_name, message: message)
+Liam::Producer.message(topic: topic_name, message: message)
 ```
 
 ### The Consumer (Service B)
@@ -82,23 +82,27 @@ All of these files should live at `app/services/liam`.
 
 Now you have to run the included task inside the Consumer App (make sure this task runs for ever):
 
-```
+```bash
 $ bundle exec rake liam:consumer:start production
 ```
 
 And that's it!
 
 ## Testing
-Can you run the test easily executing
 
+Before running the test suite you must create the topic we use to test the gem functionality:
+
+```bash
+$ aws --endpoint-url=http://localhost:4575 sns create-topic --name liam_TestProducer
 ```
-  $ bundle exec rspec
+
+This is mandatory, otherwise you're going to receive an `Aws::SNS::Errors::NotFound: Topic does not exist` exception.
+
+After that, you can run the suite with RSpec as usual:
+
+```bash
+$ bundle exec rspec
 ```
-
-If you want to run all test successfully, we need the LocalStack daemon when sending a message
-
-## Localstack Running
-  TODO
 
 ## Contributing
 

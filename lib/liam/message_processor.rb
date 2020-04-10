@@ -13,7 +13,7 @@ module Liam
 
     def self.process(message)
       raise UnexpectedMessageError, message unless message.is_a?(Aws::SQS::Types::Message)
-      puts "[aws-liam] Processing..."
+      Liam.logger.info 'Processing...'
 
       new(message).send(:process)
     end
@@ -40,25 +40,14 @@ module Liam
       raise UninitializedMessageProcessorError, e
     end
 
+    def topic_arn
+      return '' unless parsed_body.is_a?(Hash)
+
+      parsed_body['TopicArn'] || ''
+    end
+
     def message_topic_name
-      message_attribute_value.sub('_', '::').gsub(/(?<=^)(.*)(?=::)/, &:capitalize)
-    end
-
-    def message_attribute_value
-      raise MessageWithoutValueAttributeError if value.nil? || value.empty?
-
-      value
-    end
-
-    def value
-      return @value if defined?(@value)
-
-      @value = begin
-                 return if parsed_body.nil? || parsed_body.empty?
-
-                 message_attributes['event_name']&.string_value ||
-                   parsed_body.dig('MessageAttributes', 'event_name', 'Value')
-               end
+      topic_arn.split(':').last.sub('_', '::').gsub(/(?<=^)(.*)(?=::)/, &:capitalize)
     end
   end
 end
