@@ -22,10 +22,11 @@ module Liam
     attr_reader :options
 
     def execute
+      Liam.logger.info 'Consumer initialized'
       poller.poll(poller_options) do |messages|
-        puts "INFO -- [aws-liam] : ** Received messages: #{messages.size} ** --"
+        Liam.logger.info "Total received messages: #{messages.size}"
         messages.each do |message|
-          pp message
+          Liam.logger.info message
           MessageProcessor.process(message)
         end
       end
