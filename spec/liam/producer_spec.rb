@@ -60,20 +60,32 @@ RSpec.describe Liam::Producer do
     end
   end
 
-  describe 'when unable to get the topics key from the configuration file' do
+  describe '#execute' do
     subject { described_class.send(:new, message: message, topic: topic) }
 
-    before do
-      allow(subject).to receive(:topics).and_return(nil)
+    context 'when environment does not have configuration' do
+      before { allow(subject).to receive(:env_credentials).and_return(nil) }
+
+      it 'raises' do
+        expect { subject.send(:execute) }.to raise_error(Liam::NoConfigForEnvError)
+      end
     end
 
-    it do
-      expect { subject.send(:execute) }.to raise_error(
-        Liam::NoTopicsInConfigFileError,
-        'No topics found in the Liam configuration file.'
-      )
+    context 'when unable to get the topics key from the configuration file' do
+      before { allow(subject).to receive(:topics).and_return(nil) }
+
+      it 'raises' do
+        expect { subject.send(:execute) }.to raise_error(Liam::NoTopicsInConfigFileError)
+      end
+    end
+
+    context 'when environment is skipped' do
+      before { allow(ENV).to receive(:[]).with("RAILS_ENV").and_return("staging") }
+
+      it { expect(subject.send(:execute)).to eq described_class::SKIPPED_MESSAGE }
     end
   end
+
 
   describe 'successful implementation' do
     let(:producer) { described_class.send(:new, message: message, topic: topic) }

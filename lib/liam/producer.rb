@@ -2,26 +2,29 @@
 
 require 'aws-sdk-sns'
 require 'forwardable'
+require 'liam/common'
 
 module Liam
   class Producer
     DEFAULT_SUBJECT = 'liam message'
     UNSUPPORTED_MESSAGE_ERROR = 'Unsupported message argument'
     UNSUPPORTED_TOPIC_ERROR = 'Unsupported topic argument'
+    SKIPPED_MESSAGE = 'The message was skipped by the configuration of the environment'
+
     private_constant :DEFAULT_SUBJECT
 
     include Common
 
     extend Forwardable
 
-    def initialize(message:, options: {}, topic:)
+    def initialize(message:, topic:, options: {})
       @message = message
-      @options = options
       @topic = topic
+      @options = options
     end
 
-    def self.message(*args)
-      new(*args).send(:execute)
+    def self.message(**args)
+      new(**args).send(:execute)
     end
 
     private
@@ -31,6 +34,8 @@ module Liam
     attr_reader :topic, :message, :options
 
     def execute
+      raise NoConfigForEnvError unless valid_config?
+      return SKIPPED_MESSAGE if skipped?
       return UNSUPPORTED_TOPIC_ERROR unless supported_topic?
       return UNSUPPORTED_MESSAGE_ERROR unless message.is_a?(Hash)
 
@@ -57,10 +62,16 @@ module Liam
       topics[topic]
     end
 
-    def topics
-      return @topics if defined?(@topics)
+    def valid_config?
+      env_credentials && !env_credentials.empty?
+    end
 
-      @topics = env_credentials['events']
+    def skipped?
+      !!env_credentials['skip']
+    end
+
+    def topics
+      @topics ||= env_credentials['events']
     end
   end
 end

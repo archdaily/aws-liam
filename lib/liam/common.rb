@@ -16,9 +16,7 @@ module Liam
     end
 
     def env_credentials
-      return @env_credentials if defined?(@env_credentials)
-
-      @env_credentials = credentials[ENV['RAILS_ENV']]
+      @env_credentials ||= credentials[ENV['RAILS_ENV']]
     end
 
     def credentials
