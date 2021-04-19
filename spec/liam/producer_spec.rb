@@ -64,7 +64,7 @@ RSpec.describe Liam::Producer do
     subject { described_class.send(:new, message: message, topic: topic) }
 
     context 'when environment does not have configuration' do
-      before { allow(subject).to receive(:env_credentials).and_return(nil) }
+      before { allow(subject).to receive(:env_credentials) }
 
       it 'raises' do
         expect { subject.send(:execute) }.to raise_error(Liam::NoConfigForEnvError)
@@ -72,7 +72,7 @@ RSpec.describe Liam::Producer do
     end
 
     context 'when unable to get the topics key from the configuration file' do
-      before { allow(subject).to receive(:topics).and_return(nil) }
+      before { allow(subject).to receive(:topics) }
 
       it 'raises' do
         expect { subject.send(:execute) }.to raise_error(Liam::NoTopicsInConfigFileError)
