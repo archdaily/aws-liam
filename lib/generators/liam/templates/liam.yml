@@ -1,4 +1,5 @@
 default: &default
+  skip: false
   aws:
     region:
     access_key_id:
@@ -13,3 +14,6 @@ default: &default
 development: *default
 test: *default
 production: *default
+staging:
+  <<: *default
+  skip: true

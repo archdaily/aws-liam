@@ -46,6 +46,18 @@ Go to the first one an setup your credentials and topic endpoints at AWS. You'll
 
 The second file corresponds to a rake task that will be needed only in the Services that want to be listening for new messages. If your Service will only publish messages (aka will be just a producer, not a consumer) then you can forget (or even delete) this rake task.
 
+### Configuration
+Liam will fail early if the key for your environment is missing on `config/liam.yaml`.
+If you'd like to skip sending messages while you finish your setup, you can add the `skip: true` option. 
+
+For example:
+
+```
+staging:
+  <<: *default
+  skip: true
+```
+
 ## Usage
 
 ### The Producer (Service A)
