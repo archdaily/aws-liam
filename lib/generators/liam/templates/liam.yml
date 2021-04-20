@@ -14,3 +14,6 @@ default: &default
 development: *default
 test: *default
 production: *default
+staging:
+  <<: *default
+  skip: true
