@@ -4,7 +4,7 @@ default: &default
     access_key_id: test
     secret_access_key: test
     sns:
-      endpoint: http://localhost:4575
+      endpoint: http://localhost:4566
     sqs:
       endpoint: http://localhost:4576
       queue: http://localhost:4576/queue/liam_gem
