@@ -100,10 +100,16 @@ And that's it!
 
 ## Testing
 
+You can use the docker-compose.localstack.yml file to leave localstack running if you don't have it installed:
+
+```bash
+$ docker-compose -f docker-compose.localstack.yml up -d
+```
+
 Before running the test suite you must create the topic we use to test the gem functionality:
 
 ```bash
-$ aws --endpoint-url=http://localhost:4575 sns create-topic --name liam_TestProducer
+$ aws --endpoint-url=http://localhost:4566 sns create-topic --name liam_TestProducer
 ```
 
 This is mandatory, otherwise you're going to receive an `Aws::SNS::Errors::NotFound: Topic does not exist` exception.

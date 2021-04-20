@@ -1,6 +1,13 @@
 name: Main
 
-on: [pull_request]
+on:
+  workflow_dispatch:
+    inputs:
+      body:
+        default: ""
+      test:
+        default: false
+  pull_request_target:
 
 jobs:
   vm-job:
@@ -10,36 +17,33 @@ jobs:
       max-parallel: 4
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
 
-    - name: Set up Python 3.7
-      uses: actions/setup-python@v1
+    - name: Set up Ruby 2.7.2
+      uses: ruby/setup-ruby@v1
       with:
-        python_version: 3.7
+        ruby-version: 2.7.2
 
-    - name: Set up Ruby 2.6
-      uses: actions/setup-ruby@v1
+    - name: Set up aws-cli
+      uses: unfor19/install-aws-cli-action@v1
+      id: install-aws-cli
       with:
-        ruby_version: 2.6.3
-
-    - name: Set up pip
-      run: python -m pip install --upgrade pip
+        version: 2
+        run: aws --version
+        shell: bash
 
     - name: Set up LocalStack
       run: |
-        docker-compose -f docker-compose.localstack.yml up -d
-        curl "https://d1vvhvl2y92vvt.cloudfront.net/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-        unzip -q awscliv2.zip
-        sudo ./aws/install
         cp -avr .aws/ ~/
-        while ! curl -s http://localhost:4575 > /dev/null; do echo waiting for localstack; sleep 3; done;
-        aws --endpoint-url=http://localhost:4575 sns create-topic --name liam_TestProducer
+        docker-compose -f docker-compose.localstack.yml up -d
+        while ! curl -s http://localhost:4566 > /dev/null; do echo waiting for localstack; sleep 3; done;
+        aws --endpoint-url=http://localhost:4566 sns create-topic --name liam_TestProducer
 
     - name: Build
       env:
         RAILS_ENV: test
       run: |
-        gem install bundler -v 2.1.4
+        gem install bundler -v 2.1.4 -N
         bundle _2.1.4_ install --jobs 4 --retry 3
 
     - name: Run tests

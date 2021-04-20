@@ -14,7 +14,7 @@ RSpec.describe Liam::Producer do
   end
   let(:topic) { 'liam_TestProducer' }
   let(:arn) { 'arn:aws:sns:us-east-1:000000000000:liam_TestProducer' }
-  let(:sns_url) { 'http://localhost:4575/' }
+  let(:sns_url) { 'http://localhost:4566/' }
 
   before do
     stub_const('Liam::Common::CONFIG_FILE', config_path)
